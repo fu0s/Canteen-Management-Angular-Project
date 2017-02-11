@@ -3,7 +3,7 @@
 
 
 An example of managing a canteen using an angular application that has only one html page.
-As per styling, w3.css is one of the best styling librairies. It is used in this code as long as bootstrap.
+As per styling, w3.css is one of the best styling librairies. It is used in this code as well as bootstrap.
 
 
 <p> check out the two directives in the project. There main use is to create a card view filled with data after hitting enter button.
