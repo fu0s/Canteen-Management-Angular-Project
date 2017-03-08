@@ -1,198 +1,169 @@
 define(['app', 'angular', 'gessCmnModule'], function(app, angular, gessCmnModule) {
-  app.controller("TestingController", ['MessageHandler','$scope','$http', 'fileUpload','$httpBackend', function(MessageHandler,$scope,$http, fileUpload,$httpBackend) {
-
-	
-	  
-	  $.getJSON("appResources/JSON.json", function(json) {
-		    console.log(json.data); 
-		    $scope.objects = json.data;
-		   
+  app.controller("TestingController", ['MessageHandler','$rootScope','$scope','$http', 'fileUpload','$routeParams','$httpBackend','$filter','$timeout', function(MessageHandler,$rootScope,$scope,$http, fileUpload,$routeParams,$httpBackend,$filter,$timeout) {
+    
+   
+	  $scope.myVar = false ;
+	  $scope.$watch('myVar', function() {
+		  
+		    $timeout(function(){
+		      $scope.myVar = false ;
+		    },2000);
+		    
 		});
-	
-	  //initialization
-	  $scope.likesFilter = "No";
-	  //display list video
-	  $scope.display = function () {
-		  fillList($scope.numberPerPage , 1);
-		  if($scope.searchText == null){
-			  getTotalPages($scope.numberPerPage , $scope.objects.length);
-
-		  }else {
-			  getTotalPages($scope.numberPerPage , $scope.ListRecherche.length);
-
-		  }
-		  $scope.pages[1]=pageClicked( 1 , true);
-		  $scope.pages[1].paginationClass = "w3-hover-black w3-red";
-		 
-	  }
-	  //go to page
-	  $scope.goTo = function(index ){
-		 
-		  if(index == 0){
-			 
-			  var j = 0 ;
-			  for(i=1 ; i < $scope.pages.length ; i++){
-				  if($scope.pages[i].clicked == true){
-					  $scope.pages[i].clicked = false ;
-					  $scope.pages[i].paginationClass = "w3-hover-black"
-					  j=i-1;
-				  }
-			  }
-			  if(j==0){
-				  j = 1 ;
-			  }
-			  $scope.pages[j]=pageClicked( j , true);
-			  $scope.pages[j].paginationClass = "w3-hover-black w3-red";
-			  fillList($scope.numberPerPage , j);
-		  }else if (index == $scope.totalPages + 1 ){
+		$scope.myInterval = 3000;
+		  $scope.noWrapSlides = false;
+		  $scope.active = 0;
+		  var slides = $rootScope.slides = [];
+		  
+		  $rootScope.addSlide = function() {
+			    var newWidth = 600 + slides.length + 1;
 			  
-			  var j = 0 ;
-			  for(i=1 ; i < $scope.pages.length - 1 ; i++){
-				  if($scope.pages[i].clicked == true){
-					  $scope.pages[i].clicked = false ;
-					  $scope.pages[i].paginationClass = "w3-hover-black"
-					  j=i+1;
-				  }
-			  }
-			  if(j==($scope.totalPages + 1)){
-				  j = $scope.totalPages  ;
-			  }
-			  $scope.pages[j]=pageClicked( j , true);
-			  $scope.pages[j].paginationClass = "w3-hover-black w3-red";
-			  fillList($scope.numberPerPage , j);
-		  }else {
-			  
-			  for(i=1 ; i < $scope.pages.length ; i++){
-				  if($scope.pages[i].clicked == true){
-					  $scope.pages[i].clicked = false ;
-					  $scope.pages[i].paginationClass = "w3-hover-black"
-				  }
-			  }
-			  $scope.pages[index]=pageClicked( index , true);
-			  $scope.pages[index].paginationClass = "w3-hover-black w3-red";
-			  fillList($scope.numberPerPage , index);
-		  }
-	  }
-	  
-		
-		 
-	 
-	function fillList(size , index){
-		
-		 $scope.ListDisplay = [] ;
-		 $scope.ListRecherche = [] ;
-		if($scope.objects.length > 1){
-			if($scope.likesFilter == "Yes"){
-				//sorting function : a-b for ascending order and b-a for descending order
-				 $scope.objects.sort(function(a, b) {
-					    return parseFloat(b.metadata.connections.likes.total) - parseFloat(a.metadata.connections.likes.total);
-					});
-			  }else{
-				  $.getJSON("appResources/JSON.json", function(json) {
-					    console.log(json.data); 
-					    $scope.objects = json.data;
-					   
-					});
-			  }
-			 if($scope.searchText == null){
-				 for(i = 0  ; i < size ; i++  ){
-						$scope.ListDisplay[i] = $scope.objects[i + (index - 1)*size];
-					}
-			  }else{
-				  $scope.ListRecherche = [];
-				  var j = 0 ;
-				  for(i = 0  ; i < $scope.objects.length ; i++  ){
-					  if($scope.objects[i].description != null){
-						  var n = $scope.objects[i].description.search($scope.searchText);
-					  }
-					  if(n != -1){
-						  $scope.ListRecherche[j] = $scope.objects[i];
-						  j=j+1;
-					  }	
-					}
-				  var newSize = 0 ;
-				  if($scope.ListRecherche.length < size){
-					  newSize = $scope.ListRecherche.length ;
-				  }else{
-					  newSize = size
-				  }
-				  for(i = 0  ; i < newSize ; i++  ){
-						if($scope.ListRecherche[i + (index - 1)*size] != null)$scope.ListDisplay[i] = $scope.ListRecherche[i + (index - 1)*size];
-						 
-					}
-			  }
-			
-			 
-		}
-		else{
-			alert("Object is NULL");
-		}
-		
-	}
-	
-	function getTotalPages(numberPerPage , size){
-		$scope.pages      = [] ;
-		$scope.totalPages = 0;
-		var totalPages    = 0;
-		totalPages = size / numberPerPage ; /* (size / numberPerPage).toFixed(0) */
-		$scope.totalPages = setTotalPages(totalPages);
-		$scope.pages[0]=pageClicked( ">>" , false);
-		var i=0;
-		while(i < $scope.totalPages){
-		
-			$scope.pages[i+1]=pageClicked( i+1 , false);
-			i = i+1 ;
-		}
-		$scope.pages[i + 1]=pageClicked( "<<" , false);
-	}
-	
-	function pageClicked ( number, clicked){
-		var page = {
-			    number: number,
-			    clicked: clicked,
-				paginationClass: "w3-hover-black",
+			    slides.push({
+			      image: ['appResources/img/mesImages/yo.jpg','appResources/img/mesImages/sa.jpg','appResources/img/mesImages/so.jpg','appResources/img/mesImages/morocco.jpg'][slides.length % 4],
+			      text: ['Nice image','Awesome photograph','That is so cool','I love that'][slides.length % 4],
+			      id: [0,1,2,3,4][slides.length % 4],
+			    });
 			  };
+			  for (var i = 0; i < 4; i++) {
+				  $rootScope.addSlide();
+			  }
 		
-		return page ;
+		$http.post("/claimsrest/rest/getUserBeanDtl").success(function(response) {
+           
+           $scope.userName = response[0];
+           $scope.empNo    = response[1];
+          
+          }).error(function(data) {
+         
+        	  
+            MessageHandler.alert("ERROR");
+          });
 		
-	}
-	
-	function setTotalPages(x){
-		var i = 0 ;
-		while (i<x){
-			i = i + 1 ;
+		function getDate(){
+			var date = new Date();
+            var ddMMyyyy = $filter('date')(new Date(), 'dd/MM/yyyy');          
+            var HHmmss = $filter('date')(new Date(), 'HH:mm');
+            return ddMMyyyy + " " + HHmmss ;
+            
 		}
+		$scope.listComments = [{text :"Food is awesome I wish if you could add some Mandarin style cuisine to the menu",
+								name        :"Ryan Gilenski",
+								date        :"17/01/2017 12:26"},
+							   {text :"The application needs more development as it is ful of contents",
+								name        :"Ahmed Sobhi",
+								date        :"15/01/2017 09:45"}];
+		$scope.listOrders = [{text :"Aloo Aloo mutter & 3 Chapati",
+								name        :"Ryan Gilenski",
+								date        :"17/01/2017 12:26"},
+							   {text :"Couscous",
+								name        :"Ahmed Sobhi",
+								date        :"15/01/2017 09:45"}];
+		$scope.mycom = 0 ;
+		$scope.myord = 0 ;
+		$scope.list = [] ;
+		$rootScope.addTo = function(param){
+	    	var comments ={};
+	    	if(param == "comment"){
+	    		if($scope.myIndex == 0 ){
+		    		$scope.myIndex = 1;
+		    	}else{
+		    		 $scope.listComments.reverse();
+		    	}
+		    comments.text = $scope.comment ;    
+		    comments.name = $scope.userName ;
+		    comments.date = getDate();
+		   $scope.listComments.push(comments);
+		   $scope.listComments.reverse();
+	    	}
+	    	else if(param == "order"){
+	    		if($scope.myord == 0 ){
+		    		$scope.myord = 1;
+		    	}else{
+		    		 $scope.listOrders.reverse();
+		    	}
+	    		
+		    comments.text = $scope.order ;    
+		    comments.name = $scope.userName ;
+		    comments.date = getDate();
+		   $scope.listOrders.push(comments);
+		   $scope.listOrders.reverse();
+	    	}
+				    	
+	    }
 		
-		return i ;
-	}
+		//menu image slide block
+			$rootScope.listImages = [{  imgSrc      :'appResources/img/mesImages/buttchi.jpg',
+										name        :"",
+										description :"",
+										price       : ""},
+									{  imgSrc       :'appResources/img/mesImages/panma.jpg',
+										name        :"",
+										description :"",
+										price       : ""},
+									{  imgSrc       :"appResources/img/mesImages/aloo.jpg",
+										name        :"",
+										description :"",
+										price       : ""},
+									{  imgSrc       :"appResources/img/mesImages/thali.jpg",
+										name        :"",
+										description :"",
+										price       : ""}]
+								
+		var slideIndex = 1;
 	
-	// Accordion
-	  $scope.myFunction = function (id) {
-	      var x = document.getElementById(id);
-	      if (x.className.indexOf("w3-show") == -1) {
-	          x.className += " w3-show";
-	          x.previousElementSibling.className += " w3-theme-d1";
-	      } else { 
-	          x.className = x.className.replace("w3-show", "");
-	          x.previousElementSibling.className = 
-	          x.previousElementSibling.className.replace(" w3-theme-d1", "");
-	      }
-	  }
+    	function showDivs(n) {
+		  var i;
+		  var x = document.getElementsByClassName("mySlides");
+		  if (n > x.length) {slideIndex = 1}    
+		  if (n < 1) {slideIndex = x.length}
+		  for (i = 0; i < x.length; i++) {
+		     x[i].style.display = "none";  
+		  }
+		  x[slideIndex-1].style.display = "block";  
+		}
+    	$rootScope.plusDivs = function(n) {
+			  showDivs(slideIndex += n);
+		}
+		//END menu image slide block
+		
+		//Accordion block
+		$rootScope.accordFunc =function(id , idd) {
+		    var x = document.getElementById(idd);
+		    if (x.className.indexOf("w3-red") == -1) {
+		        x.className += " w3-red ";
+		    } else { 
+		        x.className = x.className.replace("w3-red", "");
+		    }
+		    
+		    var y = document.getElementById(id);
+		    if (y.className.indexOf("w3-show") == -1) {
+		        y.className += " w3-show ";
+		    } else { 
+		        y.className = y.className.replace(" w3-show", "");
+		    }
+		  
+		    
+		}
+		//End Accordion block
+		
 	
+
   }]);
-  
-  app.directive('pagesDirective', function($compile) {
+//directives
+  app.directive('commentDirective', function($compile) {
 	    return {
 	    	scope: {
 	            key: '=',
 	            
 	        },
-	     template: '<div  ng-repeat="page in key track by $index"><br>'
-		        	+'<li><a ng-click="goTo($index)" ng-class="page.paginationClass" >{{page.number}}</a></li>'
-		        	+'</div>    ',
+	     template: '<div class="w3-container w3-card-2 w3-white w3-round w3-margin" ng-repeat="com in key track by $index"><br>'
+		        +'<span class="w3-right w3-opacity">{{com.date}}</span>'
+	        +'<h4 class="w3-left">{{com.name}}</h4><br>'
+	    +'<p class="w3-right">{{com.text}}</p>'  
+	    +'</div>    ',
 	      replace: true,
 	      link: function($scope, element) {
-	    	  $scope.$watch('pages', function() {
+	    	  $scope.$watch('listComments', function() {
 		    	 
 		        var el = angular.element('<span/>');
 		       
@@ -201,10 +172,31 @@ define(['app', 'angular', 'gessCmnModule'], function(app, angular, gessCmnModule
 		        element.append(el);
 		     
 		        },true)
+	            $scope.$watch('listOrders', function() {
+		    	   
+		        var el = angular.element('<span/>');
 		       
-	           
+		        $compile(el)($scope);
+		        element.empty();
+		        element.append(el);
+		     
+		        },true)
 	      }
 	    }
 	  });
-  
+	app.directive('myEnter', function () {
+	    return function ($scope, element, attrs) {
+	        element.bind("keydown keypress", function (event) {
+	            if(event.which === 13) {
+	          	  
+	                $scope.$apply(function (){
+	                    $scope.$eval(attrs.myEnter);
+	                });
+
+	                event.preventDefault();
+	            }
+	        });
+	    };
+	});
+	//END directives
 });
