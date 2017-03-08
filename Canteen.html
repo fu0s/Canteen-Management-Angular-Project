@@ -1,133 +1,287 @@
 <!DOCTYPE html>
 <html>
-<title>Front-End Challenge</title>
+<title>CANTEEEN</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?">
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+<style type="text/css">
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+.successmsg {
+	color: #468847;
+}
+.errormsg {
+	color: #e2394c;
+}
+div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+div.scrollmenu a:hover {
+    background-color: #777;
+}
+div.scrollmenu {
+    background-color: #333;
+    overflow: auto;
+    white-space: nowrap;
+}
 </style>
-<div ng-controller="TestingController">
-	<body class="w3-theme-l5">
+
+<div  ng-controller="TestingController">
+	
+	
+	
+	<body class="w3-light-grey" style="overflow:auto">
 
 
-<!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
-  <!-- The Grid -->
-  <div class="w3-row">
-    <!-- Left Column -->
-    <div class="w3-col m3">   
-      <!-- Accordion -->
-      <div class="w3-card-2 w3-round">
-        <div class="w3-accordion w3-white">
-     		
-     	  <button  class="w3-btn-block w3-theme-l1 w3-left-align"><i class="fa fa-bars fa-fw w3-margin-right"></i> <strong>Filters</strong></button>
-          <button ng-click="myFunction('Demo1')" class="w3-btn-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> Videos to display</button>
-          <div id="Demo1" class="w3-accordion-content w3-container">
-            	  <p>
-				  <input class="w3-radio" type="radio" name="numberPerPage" ng-model="numberPerPage" value="10" >
-				  <label class="w3-validate">10 per Page</label></p>
-				  <p>
-				  <input class="w3-radio" type="radio" name="numberPerPage" ng-model="numberPerPage" value="25">
-				  <label class="w3-validate">25 per Page</label></p>
-				  <p>
-				  <input class="w3-radio" type="radio" name="numberPerPages" ng-model="numberPerPage" value="50">
-				  <label class="w3-validate">50 per Page</label></p>
-          </div>
-          <button ng-click="myFunction('Demo2')" class="w3-btn-block w3-theme-l1 w3-left-align"><i class="fa fa-thumbs-up fa-fw w3-margin-right"></i> Filter by Likes</button>
-          <div id="Demo2" class="w3-accordion-content w3-container">
-			      <p>
-				  <input class="w3-radio" type="radio" name="likesFilter" ng-model="likesFilter" value="Yes" checked>
-				  <label class="w3-validate">Yes</label></p>
-				  <p>
-				  <input class="w3-radio" type="radio" name="likesFilter" ng-model="likesFilter" value="No">
-				  <label class="w3-validate">No</label></p>
-          </div>
-          <button ng-click="myFunction('Demo3')" class="w3-btn-block w3-theme-l1 w3-left-align"><i class="fa fa-comment fa-fw w3-margin-right"></i> Filter by description text</button>
-          <div id="Demo3" class="w3-accordion-content w3-container">
-         	<p><label class="w3-label">Text to search</label>
-			<input class="w3-input" type="text" ng-model="searchText"></p>
-          </div>
-        
-        </div> 
-        <br>
-        <button ng-click="display()" class="w3-btn-block w3-dark-grey w3-left-align"><i class="fa fa-refresh fa-fw w3-margin-right"></i> Display Videos </button>
-             
-      </div>
-      <br>
-      
-      <br>
-      
-      <!-- Alert Box -->
-      <div class="w3-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-hover-text-grey w3-closebtn">
-          <i class="fa fa-remove"></i>
-        </span>
-        <p><strong>Hey!</strong></p>
-        <p>Use filters above Then click on Display results</p>
-      </div>
-     
-     <!-- ADS Box -->
-     <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
-        <p>ADS</p>
-      </div>
-    
-    <!-- End Left Column -->
-    </div>
-    
-    <!-- Middle Column -->
-    <div class="w3-col m9" >
-    
-     
-      <ul class="w3-pagination w3-right" >
-		  
-		  <div class="w3-pagination w3-right" pages-directive key="pages" ></div>
-		
-	  </ul>
-     <br>
+<div class="w3-content" style="max-width:1400px">
 
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin" ng-repeat="object in ListDisplay track by $index"><br>
-  		 <div class="w3-col m3">
-  		 	<div class="w3-row">
-			        <img src=object.user.pictures.sizes[0].link alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px"> 
-			</div> 
-			<div class="w3-row">
-			        <h4>   {{object.user.name}}</h4><br>
-			</div>
-        </div>
-         <div class="w3-col m9"> 
-         			<h2><a href="object[0].link">{{object.name}}</a></h2>
-			        <p>Description : {{object.description}}</p>
-			        <div class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="glyphicon glyphicon-eye-open"></i>{{object.stats.plays}}  Vues</div>
-			        <div class="w3-btn w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>{{object.metadata.connections.likes.total}}  Like</div>
-			        <div class="w3-btn w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>{{object.metadata.connections.comments.total}} Comment</div>
-        </div>      	
-      </div>  
-
-     
-      
-    <!-- End Middle Column -->
-    </div>
-    
-
-    
-  <!-- End Grid -->
-  </div>
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-32"> 
+  <h1><b><span class="w3-tag">MALAD CANTEEN</span></b></h1>
   
-<!-- End Page Container -->
+</header>
+
+<!-- Accueil Slider -->
+ 		<div class="w3-card-4 w3-margin w3-white "  >
+ 				
+    			<div uib-carousel active="active" interval="myInterval" no-wrap="noWrapSlides" >
+      			<div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id" >
+        		<img ng-src="{{slide.image}}" style="margin:auto; height:400px ; overflow:hidden">
+        		<div class="carousel-caption" > 
+          			<h4>Slide {{slide.id}}</h4>
+          			<p>{{slide.text}}</p>
+        		</div>
+      			</div>
+    			</div>
+  		
+ 		</div>
+ 	<!-- End Accueil Slider -->
+ 	
+
+<!-- Grid -->
+	
+
+
+<div class="w3-row">
+	
+
+<div class="w3-col l8 s12">
+ <!-- Menu choix -->
+  <div class="w3-card-4 w3-margin w3-white">
+  <img src="appResources/img/mesImages/birya.jpg" style="width:100% ">
+    <div class="w3-container w3-padding-8">
+      <h3><b>Hello {{userName}}</b></h3>
+      <h5>Please choose your meal for today</h5>
+    </div>
+
+    <div class="w3-container">
+      <p>MALAD CANTEEN has chosen only the best hjjjjjjjj  jghgjj johhasd ajdshf sudfsiugf  sfsdghfbnh  sdohfhsdofhsdohosd
+      sdflhsdhfsdhfhs sdf;sdfjsdajfsasadf;sa;j jsdfjsadlj 9wyeryqwy uahsoahhs loaoaouasuua uasoasiuasuasuoasu</p>
+      <div class="w3-row">
+        <div class="col-md-offset-4 w3-col m8 s12">
+          <p><button onclick="$('body').css('overflow','hidden');$('body').css('position','fixed');$('.carousel-indicators').css('display','none');document.getElementById('menu').style.display='block';" 
+          class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black">
+          <b>MENU</b></button></p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <hr>
+  <!-- End Menu choix -->
+
+  <!-- Special orders -->
+  <div class="w3-card-4 w3-margin w3-white">
+  <img src="appResources/img/mesImages/samosa.jpg"  class="w3-right" style="width:50%">
+    <div class="w3-container w3-padding-8">
+      <h3><b>Special Orders & Snacks</b></h3>
+    </div>
+
+    <div class="w3-container">
+      <p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at. Phasellus sed ultricies mi non congue ullam corper. Praesent tincidunt sed
+        tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      <div class="w3-row">
+        <div class="w3-col m8 s12">
+          <p><button class="w3-btn w3-padding-large w3-white w3-border w3-hover-border-black"><b>ORDER NOW »</b></button></p>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- End Special orders-->
 </div>
-<br>
 
-
+<!-- Colonne -->
+<div class="w3-col l4">
+  <!-- Let Us Know -->
+  <div class="w3-card-2 w3-margin w3-margin-top">
+  <img src="appResources/img/mesImages/know.jpg" style="width:100%">
+    <div class="w3-container w3-white">
+      <h4><b>LET US KNOW !</b></h4>
+      <p>Guaranteeing the best for our clients is our responsability. For this reason we provided the "LET US KNOW !" corner, to know more about your remarks and suggestions regarding our service,food and hospitality.
+      	 These reviews are checked closely in order to improve the quality of our service. You will find also these reviews displayed in our page to guarantee complete transparency and credibility.
+      	<hr><span class="w3-hover-border-black w3-center">So please let us know what you do think</span></p>
+      	<input class="w3-center w3-padding-4" style="width: 350px;" ng-model="comment" my-enter="addTo('comment');comment='';myVar=true"/>
+      	 <div class="w3-panel w3-green vertical-collapse"   uib-collapse="!myVar" vertical>
+		    <h3>Success !</h3>
+		    <p>Thank you for your feedback.</p>
+		  </div>
+      	<hr>
+    </div>
+  </div><hr>
+  
+  <!-- Hot Choices -->
+  <div class="w3-card-2 w3-margin">
+    <div class="w3-container w3-padding">
+      <h4>Hot Choices</h4>
+    </div>
+    <ul class="w3-ul w3-hoverable w3-white">
+      <li class="w3-padding-16">
+        <img src="appResources/img/mesImages/panma.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <span class="w3-large">Paneer masala</span><br>
+        <span>Ordered <span class="w3-badge">256</span> times</span>
+      </li>
+      <li class="w3-padding-16">
+        <img src="appResources/img/mesImages/aloo.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <span class="w3-large">Aloo mutter</span><br>
+       <span>Ordered <span class="w3-badge">172</span> times</span>
+      </li> 
+      <li class="w3-padding-16">
+        <img src="appResources/img/mesImages/thali.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <span class="w3-large">Thali</span><br>
+        <span>Ordered <span class="w3-badge">196</span> times</span>
+      </li>   
+      <li class="w3-padding-16 w3-hide-medium w3-hide-small">
+        <img src="appResources/img/mesImages/buttchi.jpg" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+        <span class="w3-large">Butter chicken</span><br>
+        <span>Ordered <span class="w3-badge">202</span> times</span>
+    </ul>
+  </div>
+  <hr> 
  
-<script>
-</script>
+  
+  
+<!-- END Colonne -->
+</div>
+</div><div class="w3-row">
+
+  <div class="w3-col s6  w3-center">
+			<div class="w3-card-4 w3-margin ">
+					<header class="w3-container w3-green">
+  						<h2>FEEDBACK</h2>
+					</header>
+
+  						<div comment-directive key="listComments" ></div>
+
+			 </div>
+  </div>
+  <div class="w3-col s6  ">
+  			<div class="w3-card-4 w3-margin ">
+					<header class="w3-container w3-dark-grey">
+  						<h2>Orders Of Today</h2>
+					</header>
+
+					<div class="w3-container">
+  						
+  						<div comment-directive key="listOrders" ></div>
+					</div>
+
+					
+			 </div>
+	</div>
+
+
+<!-- END GRID -->
+</div><br>
+
+<!-- END w3-content -->
+</div>
+
+
+<!-- Floating Content -->
+
+<!-- Menu -->
+<div id="menu" class="w3-modal ">
+  <div class="w3-modal-content w3-animate-zoom w3-dark-grey">
+
+<header class="w3-container w3-dark-grey">
+        <span onclick="document.getElementById('menu').style.display='none';$('body').css('overflow','scroll');$('body').css('position','relative');$('.carousel-indicators').css('display','block');" 
+        class="w3-closebtn w3-xxlarge w3-hover-text-grey">x</span>
+  <div id="main"></div>
+  <h1>My Header</h1>
+</header>
+
+
+		
+    	<!-- <div class="w3-display-container" style="height:460px;" ng-repeat="img in listImages">
+    	
+    				<img class="mySlides w3-display-middle" src="{{img.imgSrc}}" style="width:650px;">
+    
+  			<a class="w3-btn-floating w3-display-left" ng-click="plusDivs(-1)">&#10094;</a>
+  			<a class="w3-btn-floating w3-display-right" ng-click="plusDivs(1)">&#10095;</a>
+  			<button class="w3-btn w3-green w3-padding w3-display-bottommiddle">Add to order</button>	
+		
+			
+		
+		</div>  -->
+		<div class="scrollmenu">
+					  <a href="#home">Home</a>
+					  <a href="#news">News</a>
+					  <a href="#contact">Contact</a>
+					  <a href="#about">About</a>
+					  <a href="#support">Support</a>
+					  <a href="#blog">Blog</a>
+					  <a href="#tools">Tools</a>  
+					  <a href="#base">Base</a>
+					  <a href="#custom">Custom</a>
+					  <a href="#more">More</a>
+					  <a href="#logo">Logo</a>
+					  <a href="#friends">Friends</a>
+					  <a href="#partners">Partners</a>
+					  <a href="#people">People</a>
+					  <a href="#work">Work</a>
+		</div>
+		
+
+
+<footer class="w3-container w3-dark-grey">
+  
+      <button id="Demo5" ng-click="accordFunc('Demo2', 'Demo5' )" class="w3-btn-block w3-left-align">
+      Accordion 2
+    </button>
+    <div id="Demo2" class="w3-accordion-content">
+      <div class="scrollmenu">
+  			<a  ng-repeat="slide in slides track by slide.id" index="slide.id" style="width:25%;">
+	        		<img ng-src="{{slide.image}}" style="width:100%;"> 
+	        </a>
+		</div>
+    </div>
+
+</footer>
+
+</div>
+
+  <hr>
+<!-- End Floating Content -->
+
+<!-- Footer -->
+<footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+<h3><b>About Us</b></h3>
+ 
+  <button class="w3-btn w3-disabled w3-padding-large w3-margin-bottom">Previous</button>
+  <button class="w3-btn w3-padding-large w3-margin-bottom">Next »</button>
+  <p>Powered by <a href="http://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
+<footer class="w3-container w3-red w3-padding-32 w3-margin-top">
+</footer>
 
 </body>
-
+	
 </div>
 
-</html>
+
+
+</div>
