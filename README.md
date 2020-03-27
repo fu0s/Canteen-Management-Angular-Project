@@ -2,7 +2,7 @@
 <strong> Not finished yet  </strong>
 
 
-An example of managing a canteen using an angular application that has only one html page.
+An example of managing a canteen using an angularJs application that has only one html page.
 As per styling, w3.css is one of the best styling librairies. It is used in this code as well as bootstrap.
 
 
