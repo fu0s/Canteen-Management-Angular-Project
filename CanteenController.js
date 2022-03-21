@@ -1,4 +1,4 @@
-define(['app', 'angular', 'gessCmnModule'], function(app, angular, gessCmnModule) {
+define(['app', 'angular'], function(app, angular) {
   app.controller("TestingController", ['MessageHandler','$rootScope','$scope','$http', 'fileUpload','$routeParams','$httpBackend','$filter','$timeout', function(MessageHandler,$rootScope,$scope,$http, fileUpload,$routeParams,$httpBackend,$filter,$timeout) {
     
    
